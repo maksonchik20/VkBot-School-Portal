@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
 from bs4 import BeautifulSoup
 import time
-import requests
-import fake_useragent
 from selenium import webdriver
 from fake_useragent import UserAgent
-import sqlite3
+# import sqlite3
 import vk_api
 from vk_api.longpoll import VkLongPoll, VkEventType
 from vk_api.utils import get_random_id
@@ -106,7 +104,7 @@ def main():
 if __name__ == '__main__':
     cur.execute('''
         CREATE TABLE IF NOT EXISTS marks(
-    id INT PRIMARY KEY NOT NULL,
+    id INTEGER NOT NULL generated always as identity,
     subject VARCHAR,
     date VARCHAR,
     mark VARCHAR);
