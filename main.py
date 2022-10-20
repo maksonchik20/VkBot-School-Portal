@@ -92,7 +92,7 @@ def main():
                 one_result = cur.fetchall()
                 conn.commit()
                 if len(one_result) == 0:
-                    cur.execute(f" INSERT INTO marks (subject, date, mark) VALUES(?, ?, ?)", data_with_mark)
+                    cur.execute(f" INSERT INTO marks (subject, date, mark) VALUES('{subject}', '{date_end}', '{ocenka}')")
                     conn.commit()
                     write_message(483550384, f'Новая оценка: {subject} {date_end} {ocenka}')
             time.sleep(60)
@@ -112,12 +112,6 @@ if __name__ == '__main__':
     mark VARCHAR);
     ''')
     conn.commit()
-    # for event in longpool.listen():
-    #     if event.type == VkEventType.MESSAGE_NEW and event.to_me and event.text:
-    #         reseived_message = event.text
-    #         sender = event.user_id
-    #         text = reseived_message.lower()
-    #         print(text, sender)
     main()
 
     
