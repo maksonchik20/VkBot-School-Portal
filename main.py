@@ -2,10 +2,9 @@
 from bs4 import BeautifulSoup
 import time
 from selenium import webdriver
-from fake_useragent import UserAgent
 # import sqlite3
 import vk_api
-from vk_api.longpoll import VkLongPoll, VkEventType
+from vk_api.longpoll import VkLongPoll
 from vk_api.utils import get_random_id
 import os
 import psycopg2
