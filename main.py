@@ -10,10 +10,12 @@ import vk_api
 from vk_api.longpoll import VkLongPoll, VkEventType
 from vk_api.utils import get_random_id
 import os
+import psycopg2
 
 token = "eb7f73e097d72416d1f829dd1b9e5bbc1400c48959713fb935f33a1a76823dd91056bd6a6350e3e64e8ba"
 
-conn = sqlite3.connect('marks.sqlite')
+# conn = sqlite3.connect('marks.sqlite')
+conn = psycopg2.connect(os.environ['DATABASE_URL'], sslmode='require')
 cur = conn.cursor()
 
 class MyLongPool(VkLongPoll):
