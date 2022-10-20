@@ -51,7 +51,7 @@ def main():
 
 
     driver = webdriver.Chrome(
-        executable_path = os.environ.get("CHROMEDRIVER_PATH")
+        executable_path = os.environ.get("CHROMEDRIVER_PATH"),
         # executable_path='D:\PyCharm\parser_school_mosreg\chromedriver.exe',
         chrome_options = chrome_options
         )
