@@ -43,17 +43,17 @@ authorize = vk_api.VkApi(token=token)
 longpool = MyLongPool(authorize)
 
 def main():
-    options = webdriver.ChromeOptions()
-    options.binary_location = os.environ.get('GOOGLE_CHROME_BIN')
-    options.add_argument('--headless')
-    options.add_argument('--disable-dev-shm-usage')
-    options.add_argument('--no-sandbox')
+    chrome_options = webdriver.ChromeOptions()
+    chrome_options.binary_location = os.environ.get('GOOGLE_CHROME_BIN')
+    chrome_options.add_argument('--headless')
+    chrome_options.add_argument('--disable-dev-shm-usage')
+    chrome_options.add_argument('--no-sandbox')
 
 
     driver = webdriver.Chrome(
         executable_path = os.environ.get("CHROMEDRIVER_PATH")
         # executable_path='D:\PyCharm\parser_school_mosreg\chromedriver.exe',
-        options=options
+        chrome_options = chrome_options
         )
     url = 'https://login.school.mosreg.ru/?ReturnUrl=https%3a%2f%2fschools.school.mosreg.ru%2fmarks.aspx%3fschool%3d2000000000664%26tab%3dweek'
     try:
