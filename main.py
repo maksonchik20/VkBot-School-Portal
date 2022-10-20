@@ -106,7 +106,7 @@ def main():
 if __name__ == '__main__':
     cur.execute('''
         CREATE TABLE IF NOT EXISTS marks(
-    id INTEGER PRIMARY KEY,
+    id INT PRIMARY KEY NOT NULL,
     subject VARCHAR,
     date VARCHAR,
     mark VARCHAR);
