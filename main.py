@@ -76,7 +76,7 @@ def main():
             driver.refresh()
             time.sleep(1)
             block_with_data = driver.find_element_by_id('user-start-page').get_attribute('innerHTML')
-            html = BeautifulSoup(block_with_data, "lxml", from_encoding='utf-8')
+            html = BeautifulSoup(block_with_data, "lxml")
             data = html.find('div').find('div').next_sibling.find('div').next_sibling
             for el in data.find_all('div', attrs={'data-mark-id': True}):
                 mark = el.find('div').next_sibling.next_sibling.next_sibling.text
