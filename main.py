@@ -5,16 +5,16 @@ from selenium import webdriver
 import vk_api
 from vk_api.longpoll import VkLongPoll, VkEventType
 from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType
-from vk_api.keyboard import VkKeyboard, VkKeyboardColor, VkKeyboardButton
+from vk_api.keyboard import VkKeyboard, VkKeyboardColor
 from vk_api.utils import get_random_id
 import os
 import psycopg2
 from threading import Thread
-import sqlite3
+# import sqlite3
 from datetime import datetime
 from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager
+# from selenium.webdriver.chrome.service import Service
+# from webdriver_manager.chrome import ChromeDriverManager
 
 # token = "eb7f73e097d72416d1f829dd1b9e5bbc1400c48959713fb935f33a1a76823dd91056bd6a6350e3e64e8ba"
 token = 'vk1.a.OvDoILHrDaWMez-iTyDP78WOVyKqqzsTqV8ma6cNnJg2t3X5kXgWZ78LJxYjpVDoTNM9cox-Y70wIhS9knDIgG_SL0_v_sCeoRGxtuumIK2URLjI_MPQAsxzodAl8wEu7hgtUMxKRVm9esupVpEvQ1wYTWm8Xr4dHot4mdATBbTUSEWmGTy-2KpRv2uuWTik4--TtvFWq3HjKcIOm-kOdA'
