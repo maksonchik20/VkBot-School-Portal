@@ -126,6 +126,7 @@ def listenVk():
                 if text == 'какие предметы мне подтянуть?':
                     result1 = []
                     result2 = []
+                    result3 = []
                     keyboard = VkKeyboard(one_time=False)
                     keyboard.add_button("Какие предметы мне подтянуть?", color=VkKeyboardColor.PRIMARY)
                     write_message(sender, 'Сейчас пришлю. Минутку...', keyboard)
@@ -182,14 +183,18 @@ def listenVk():
                                     subject = data[el].find('td', class_='s2').find('strong', class_='u').text
                                     if avg_mark < 4.5:
                                         result1.append(f'{subject} - Балл: {avg_mark}')
-                                    else:
+                                    elif avg_mark == 4.5:
                                         result2.append(f'{subject} - Балл: {avg_mark}')
+                                    else:
+                                        result3.append(f'{subject} - Балл: {avg_mark}')
                             except:
                                 pass
                         if len(result1) >= 1 or len(result2) >= 1:
                             message = ""
+                            if len(result3) >= 1:
+                                message += f"✅ Все хорошо:\n" + "\n".join(result3)
                             if len(result1) >= 1:
-                                message += f"🆘 Предметы подтянуть:\n" + "\n".join(result1)
+                                message += f"\n\n🆘 Подтянуть:\n" + "\n".join(result1)
                             if len(result2) >= 1:
                                 message += '\n\n⚠ Граничный балл: \n' + "\n".join(result2)
                             write_message(sender, message, keyboard)
