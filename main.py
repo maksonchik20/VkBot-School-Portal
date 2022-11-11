@@ -116,7 +116,6 @@ def listenVk():
         for event in longpool.listen():
             if event.type == 'like_add':
                 print('like')
-            print(event.type)
             if event.type == VkBotEventType.MESSAGE_NEW:
                 reseived_message = event.object.message['text']
                 sender = event.object.message['from_id']
@@ -211,9 +210,9 @@ if __name__ == '__main__':
     # mark VARCHAR);
     # ''')
     # conn.commit()
-    process1 = Thread(target=main)
+    # process1 = Thread(target=main)
     process2 = Thread(target=listenVk)
-    process1.start()
+    # process1.start()
     process2.start()
 
 
