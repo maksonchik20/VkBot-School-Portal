@@ -10,10 +10,12 @@ from vk_api.utils import get_random_id
 import os
 import psycopg2
 from threading import Thread
-# import sqlite3
+import sqlite3
 from datetime import datetime
 from selenium.webdriver.common.by import By
-# from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions
+from selenium.webdriver.chrome.service import Service
 # from webdriver_manager.chrome import ChromeDriverManager
 
 # token = "eb7f73e097d72416d1f829dd1b9e5bbc1400c48959713fb935f33a1a76823dd91056bd6a6350e3e64e8ba"
@@ -132,21 +134,22 @@ def listenVk():
                         conn = psycopg2.connect(os.environ['DATABASE_URL'], sslmode='require')
                         cur = conn.cursor()
                         chrome_options = webdriver.ChromeOptions()
-                        chrome_options.add_argument('--ignore-certificate-errors-spki-list')
+                        # chrome_options.add_argument('--ignore-certificate-errors-spki-list')
                         chrome_options.binary_location = os.environ.get('GOOGLE_CHROME_BIN')
                         chrome_options.add_argument('--headless')
                         chrome_options.add_argument('--disable-dev-shm-usage')
                         chrome_options.add_argument('--no-sandbox')
                         driver = webdriver.Chrome(
-                            executable_path = os.environ.get("CHROMEDRIVER_PATH"),
-                            # executable_path='D:\PyCharm\parser_school_mosreg\chromedriver.exe',
-                            # service=Service(),
+                            # executable_path = os.environ.get("CHROMEDRIVER_PATH"),
+                            executable_path='D:\PyCharm\parser_school_mosreg\chromedriver.exe',
+                            service=Service(),
                             chrome_options = chrome_options
                             )
                         url = 'https://login.school.mosreg.ru/?ReturnUrl=https%3a%2f%2fschools.school.mosreg.ru%2fmarks.aspx%3fschool%3d2000000000664%26tab%3dweek'
                         try:
                             driver.get(url)
                             time.sleep(1)
+                            print(driver.title)
                             login_input = driver.find_element(By.CSS_SELECTOR, "input[name='login'].mosreg-login-form__input")
                             login_input.clear()
                             login_input.send_keys("gorshunov.maksim")
@@ -157,12 +160,13 @@ def listenVk():
                             time.sleep(0.3)
                             btn_submit.click()
                             time.sleep(1.5)
-                            # progress = driver.find_element(By.CSS_SELECTOR, "a[title='Успеваемость'].header-submenu__link")
-                            # progress.click()
-                            # time.sleep(2)
-                            driver.get("https://schools.school.mosreg.ru/marks.aspx?school=2000000000664&index=7&tab=period&homebasededucation=False")
-                            # tabPeriod = driver.find_element(By.ID, 'TabPeriod')
-                            # tabPeriod.click()  
+                            progress = driver.find_element(By.CSS_SELECTOR, "a[title='Успеваемость'].header-submenu__link")
+                            progress.click()
+                            time.sleep(2)
+                            print(driver.title)
+                            WebDriverWait(driver, 10).until(expected_conditions.element_to_be_clickable((By.ID, 'TabPeriod')))
+                            tabPeriod = driver.find_element(By.ID, 'TabPeriod')
+                            tabPeriod.click()  
                             time.sleep(1.5)  
                             
                         except Exception as _ex:
@@ -170,7 +174,9 @@ def listenVk():
                             print(_ex)
                         driver.refresh()
                         time.sleep(1)
+                        print(driver.title)
                         block_with_data = driver.find_element(By.TAG_NAME, 'tbody').get_attribute('innerHTML')
+                        print(driver.title)
                         html = BeautifulSoup(block_with_data, "lxml")
                         data = html.find_all('tr')
                         for el in range(2, len(data)):
