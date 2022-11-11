@@ -135,14 +135,14 @@ def listenVk():
                         conn = psycopg2.connect(os.environ['DATABASE_URL'], sslmode='require')
                         cur = conn.cursor()
                         chrome_options = webdriver.ChromeOptions()
-                        # chrome_options.add_argument('--ignore-certificate-errors-spki-list')
+                        chrome_options.add_argument('--ignore-certificate-errors-spki-list')
                         chrome_options.binary_location = os.environ.get('GOOGLE_CHROME_BIN')
                         chrome_options.add_argument('--headless')
                         chrome_options.add_argument('--disable-dev-shm-usage')
                         chrome_options.add_argument('--no-sandbox')
                         driver = webdriver.Chrome(
-                            # executable_path = os.environ.get("CHROMEDRIVER_PATH"),
-                            executable_path='D:\PyCharm\parser_school_mosreg\chromedriver.exe',
+                            executable_path = os.environ.get("CHROMEDRIVER_PATH"),
+                            # executable_path='D:\PyCharm\parser_school_mosreg\chromedriver.exe',
                             service=Service(),
                             chrome_options = chrome_options
                             )
@@ -179,18 +179,20 @@ def listenVk():
                         for el in range(2, len(data)):
                             try:
                                 avg_mark = float(data[el].find('span', class_='analytics-app-popup-avgmark').text.replace(',', '.'))
-                                if avg_mark <= 4.5:
-                                    subject = data[el].find('td', class_='s2').find('strong', class_='u').text
-                                    if avg_mark < 4.5:
-                                        result1.append(f'{subject} - Балл: {avg_mark}')
-                                    elif avg_mark == 4.5:
-                                        result2.append(f'{subject} - Балл: {avg_mark}')
-                                    else:
-                                        result3.append(f'{subject} - Балл: {avg_mark}')
+                                # if avg_mark <= 4.5:
+                                subject = data[el].find('td', class_='s2').find('strong', class_='u').text
+                                if avg_mark < 4.5:
+                                    result1.append(f'{subject} - Балл: {avg_mark}')
+                                elif avg_mark == 4.5:
+                                    result2.append(f'{subject} - Балл: {avg_mark}')
+                                else:
+                                    result3.append(f'{subject} - Балл: {avg_mark}')
                             except:
                                 pass
-                        if len(result1) >= 1 or len(result2) >= 1:
+                        
+                        if len(result1) >= 1 or len(result2) >= 1 or len(result3) >= 1:
                             message = ""
+                            print(result3)
                             if len(result3) >= 1:
                                 message += f"✅ Все хорошо:\n" + "\n".join(result3)
                             if len(result1) >= 1:
