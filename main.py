@@ -159,9 +159,10 @@ def listenVk():
                             time.sleep(1.5)
                             progress = driver.find_element(By.CSS_SELECTOR, "a[title='Успеваемость'].header-submenu__link")
                             progress.click()
-                            time.sleep(1)
+                            time.sleep(3)
                             tabPeriod = driver.find_element(By.ID, 'TabPeriod')
-                            tabPeriod.click()    
+                            tabPeriod.click()  
+                            time.sleep(1)  
                             
                         except Exception as _ex:
                             write_message(483550384, f'{datetime.now()} - {_ex}')
