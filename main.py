@@ -164,9 +164,11 @@ def listenVk():
                             progress.click()
                             time.sleep(2)
                             print(driver.title)
-                            WebDriverWait(driver, 10).until(expected_conditions.element_to_be_clickable((By.ID, 'TabPeriod')))
+                            # WebDriverWait(driver, 10).until(expected_conditions.element_to_be_clickable((By.ID, 'TabPeriod')))
                             tabPeriod = driver.find_element(By.ID, 'TabPeriod')
-                            tabPeriod.click()  
+                            print(tabPeriod)
+                            driver.execute_script("arguments[0].click();", tabPeriod)
+                            # tabPeriod.click()  
                             time.sleep(1.5)  
                             
                         except Exception as _ex:
