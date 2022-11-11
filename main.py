@@ -149,7 +149,6 @@ def listenVk():
                         try:
                             driver.get(url)
                             time.sleep(1)
-                            print(driver.title)
                             login_input = driver.find_element(By.CSS_SELECTOR, "input[name='login'].mosreg-login-form__input")
                             login_input.clear()
                             login_input.send_keys("gorshunov.maksim")
@@ -162,23 +161,18 @@ def listenVk():
                             time.sleep(1.5)
                             progress = driver.find_element(By.CSS_SELECTOR, "a[title='Успеваемость'].header-submenu__link")
                             progress.click()
-                            time.sleep(2)
-                            print(driver.title)
-                            # WebDriverWait(driver, 10).until(expected_conditions.element_to_be_clickable((By.ID, 'TabPeriod')))
+                            time.sleep(1)
                             tabPeriod = driver.find_element(By.ID, 'TabPeriod')
                             print(tabPeriod)
                             driver.execute_script("arguments[0].click();", tabPeriod)
-                            # tabPeriod.click()  
-                            time.sleep(1.5)  
+                            time.sleep(1)  
                             
                         except Exception as _ex:
                             write_message(483550384, f'{datetime.now()} - {_ex}')
                             print(_ex)
                         driver.refresh()
                         time.sleep(1)
-                        print(driver.title)
                         block_with_data = driver.find_element(By.TAG_NAME, 'tbody').get_attribute('innerHTML')
-                        print(driver.title)
                         html = BeautifulSoup(block_with_data, "lxml")
                         data = html.find_all('tr')
                         for el in range(2, len(data)):
@@ -220,9 +214,9 @@ if __name__ == '__main__':
     # mark VARCHAR);
     # ''')
     # conn.commit()
-    # process1 = Thread(target=main)
+    process1 = Thread(target=main)
     process2 = Thread(target=listenVk)
-    # process1.start()
+    process1.start()
     process2.start()
 
 
