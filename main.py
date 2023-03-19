@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 import time
 from selenium import webdriver
 import vk_api
-from vk_api.longpoll import VkLongPoll, VkEventType
+from vk_api.longpoll import VkLongPoll
 from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType
 from vk_api.keyboard import VkKeyboard, VkKeyboardColor
 from vk_api.utils import get_random_id
@@ -13,15 +13,14 @@ from threading import Thread
 import sqlite3
 from datetime import datetime
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.chrome.service import Service
+from .env import *
 # from webdriver_manager.chrome import ChromeDriverManager
 
-# token = "eb7f73e097d72416d1f829dd1b9e5bbc1400c48959713fb935f33a1a76823dd91056bd6a6350e3e64e8ba"
-token = 'vk1.a.OvDoILHrDaWMez-iTyDP78WOVyKqqzsTqV8ma6cNnJg2t3X5kXgWZ78LJxYjpVDoTNM9cox-Y70wIhS9knDIgG_SL0_v_sCeoRGxtuumIK2URLjI_MPQAsxzodAl8wEu7hgtUMxKRVm9esupVpEvQ1wYTWm8Xr4dHot4mdATBbTUSEWmGTy-2KpRv2uuWTik4--TtvFWq3HjKcIOm-kOdA'
+token = TOKEN
 # conn = sqlite3.connect('marks.sqlite')
-conn = psycopg2.connect(os.environ['DATABASE_URL'], sslmode='require')
+conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 cur = conn.cursor()
 
 class MyLongPool(VkLongPoll):
@@ -32,6 +31,7 @@ class MyLongPool(VkLongPoll):
                     yield event
             except Exception as e:
                 print(e)
+
 
 def write_message(sender, message, keyboard = None, attachments = []):
     post = {
@@ -48,22 +48,21 @@ def write_message(sender, message, keyboard = None, attachments = []):
     authorize.method("messages.send", post)
 
 authorize = vk_api.VkApi(token=token)
-# longpool = MyLongPool(authorize)
 longpool = VkBotLongPoll(authorize, '210871312')
 
 def main():
     # conn = sqlite3.connect('marks.sqlite')
-    conn = psycopg2.connect(os.environ['DATABASE_URL'], sslmode='require')
+    conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     cur = conn.cursor()
     chrome_options = webdriver.ChromeOptions()
-    chrome_options.binary_location = os.environ.get('GOOGLE_CHROME_BIN')
+    chrome_options.binary_location = GOOGLE_CHROME_BIN
     chrome_options.add_argument('--headless')
     chrome_options.add_argument('--disable-dev-shm-usage')
     chrome_options.add_argument('--no-sandbox')
 
 
     driver = webdriver.Chrome(
-        executable_path = os.environ.get("CHROMEDRIVER_PATH"),
+        executable_path = CHROMEDRIVER_PATH,
         # executable_path='D:\PyCharm\parser_school_mosreg\chromedriver.exe',
         chrome_options = chrome_options
         )
@@ -73,10 +72,10 @@ def main():
         time.sleep(1)
         login_input = driver.find_element(By.CSS_SELECTOR, "input[name='login'].mosreg-login-form__input")
         login_input.clear()
-        login_input.send_keys("gorshunov.maksim")
+        login_input.send_keys(login)
         pass_input = driver.find_element(By.CSS_SELECTOR, "input[name='password'].mosreg-login-form__input")
         pass_input.clear()
-        pass_input.send_keys("Secretno444")
+        pass_input.send_keys(password)
         btn_submit = driver.find_element(By.CSS_SELECTOR, "input[type='submit'].mosreg-button")
         time.sleep(0.3)
         btn_submit.click()
@@ -152,10 +151,10 @@ def listenVk():
                             time.sleep(1)
                             login_input = driver.find_element(By.CSS_SELECTOR, "input[name='login'].mosreg-login-form__input")
                             login_input.clear()
-                            login_input.send_keys("gorshunov.maksim")
+                            login_input.send_keys(login)
                             pass_input = driver.find_element(By.CSS_SELECTOR, "input[name='password'].mosreg-login-form__input")
                             pass_input.clear()
-                            pass_input.send_keys("Secretno444")
+                            pass_input.send_keys(password)
                             btn_submit = driver.find_element(By.CSS_SELECTOR, "input[type='submit'].mosreg-button")
                             time.sleep(0.3)
                             btn_submit.click()
@@ -179,7 +178,6 @@ def listenVk():
                         for el in range(2, len(data)):
                             try:
                                 avg_mark = float(data[el].find('span', class_='analytics-app-popup-avgmark').text.replace(',', '.'))
-                                # if avg_mark <= 4.5:
                                 subject = data[el].find('td', class_='s2').find('strong', class_='u').text
                                 if avg_mark < 4.5:
                                     result1.append(f'{subject} - Балл: {avg_mark}')
@@ -213,19 +211,15 @@ def listenVk():
                     continue
 
 if __name__ == '__main__':
-    # cur.execute('''
-    #     CREATE TABLE IF NOT EXISTS marks(
-    # id INTEGER NOT NULL generated always as identity,
-    # subject VARCHAR,
-    # date VARCHAR,
-    # mark VARCHAR);
-    # ''')
-    # conn.commit()
+    cur.execute('''
+        CREATE TABLE IF NOT EXISTS marks(
+    id INTEGER NOT NULL generated always as identity,
+    subject VARCHAR,
+    date VARCHAR,
+    mark VARCHAR);
+    ''')
+    conn.commit()
     process1 = Thread(target=main)
     process2 = Thread(target=listenVk)
     process1.start()
-    process2.start()
-
-
-    
-    
+    process2.start()    
